@@ -1,6 +1,6 @@
 {
   "name": "codemancer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Unleash the coding power of GPTs from your command line. Effortlessly feed entire files to GPT-4 to modify them as prompted. Write the generated code back to the file or save as a copy.",
   "main": "index.js",
   "bin": {
