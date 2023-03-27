@@ -1,4 +1,4 @@
-# codemancer: Code with GPT-4 from your command line
+# codemancer: coding superpowers with GPT-4 in your command line 🧙‍♂️
 
 `codemancer` is a command line tool that uses the OpenAI API to generate code based on a given prompt and input file. You can use it to change code in-place or create new files.
 
