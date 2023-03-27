@@ -22,7 +22,7 @@ async function main() {
     prompt,
     modelName,
     temperature,
-    silenceLevel,
+    verbosity,
   } = argv;
 
   const inputContent = inputFilePath ? readInputFile(inputFilePath) : "";
@@ -31,7 +31,7 @@ async function main() {
     inputFilePath,
     inputContent
   );
-  if (silenceLevel > 2) {
+  if (verbosity > 2) {
     console.log(chalk.cyan(promptWithInput));
   }
 
@@ -46,25 +46,25 @@ async function main() {
 
     if (codeBlocks.length > 0) {
       for (const { language, codeBlock } of codeBlocks) {
-        if (silenceLevel > 1) {
+        if (verbosity > 1) {
           console.log(chalk.white("Code block found:"));
           console.log(chalk.green(codeBlock));
         }
 
-        const confirmed = await confirmWriteToFile(language, silenceLevel);
+        const confirmed = await confirmWriteToFile(language, verbosity);
         if (confirmed) {
           fs.writeFileSync(outputFilePath, codeBlock, "utf-8");
-          if (silenceLevel > 0) {
+          if (verbosity > 0) {
             console.log(chalk.white(`Code block written to ${outputFilePath}`));
           }
         } else {
-          if (silenceLevel > 0) {
+          if (verbosity > 0) {
             console.log(chalk.white("Operation aborted by the user."));
           }
         }
       }
     } else {
-      if (silenceLevel > 0) {
+      if (verbosity > 0) {
         console.log(chalk.red("No code block found in the completion."));
       }
     }
@@ -102,10 +102,10 @@ function configureCommandLineArguments() {
       description: "Temperature",
     })
     .option("s", {
-      alias: "silence",
+      alias: "verbosity",
       type: "number",
-      default: 3,
-      description: "Silence level (0-3)",
+      default: 1,
+      description: "Verbosity (0-3)",
     })
     .option("h", {
       alias: "help",
@@ -124,7 +124,7 @@ function configureCommandLineArguments() {
     prompt: args.p,
     modelName: args.m,
     temperature: args.t,
-    silenceLevel: args.s,
+    verbosity: args.s,
   };
 }
 
@@ -136,7 +136,7 @@ function displayHelpMessage() {
   console.log("  -o, --output <path>      Output file path (optional)");
   console.log("  -m, --model <name>       Model name (default: gpt-4)");
   console.log("  -t, --temperature <num>  Model temperature (default: 0)");
-  console.log("  -s, --silence <num>      Silence level (0-3, default: 3)");
+  console.log("  -s, --verbosity <num>    Verbosity (0-3, default: 1)");
   console.log("  -h, --help               Display help message");
 }
 
@@ -251,11 +251,11 @@ function extractCodeBlocks(completion) {
   return codeBlocks;
 }
 
-function confirmWriteToFile(language, silenceLevel) {
+function confirmWriteToFile(language, verbosity) {
   return new Promise((resolve) => {
     process.stdin.resume();
 
-    if (silenceLevel === 0) {
+    if (verbosity === 0) {
       resolve(true);
     }
 
