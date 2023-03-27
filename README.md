@@ -32,7 +32,7 @@ This command will read the content of the input file and send it along with the 
 
 ### Writing to a different file
 
-Useful for generating a new file with similar functionality, generating readmes, or interface definitions (e.g. rpc).
+Useful for generating a new file with similar functionality, readmes, or interface definitions (e.g. rpc).
 
 ```bash
 codemancer -i input_file_path -o output_file_path -p "extract inlined types into interfaces in a separate file"

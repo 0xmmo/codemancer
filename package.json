@@ -16,5 +16,17 @@
     "eventsource-parser": "^1.0.0",
     "node-fetch": "^2.6.9",
     "yargs": "^17.7.1"
-  }
+  },
+  "keywords": [
+    "command",
+    "command-line",
+    "ai",
+    "openai",
+    "open-ai",
+    "gpt",
+    "gpt-4",
+    "gpt-3.5-turbo",
+    "codegen",
+    "popular"
+  ]
 }
