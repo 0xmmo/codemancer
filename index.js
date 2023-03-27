@@ -19,7 +19,7 @@ async function main() {
   const { inputFilePath, outputFilePath, prompt, modelName, temperature } =
     argv;
 
-  const inputContent = readInputFile(inputFilePath);
+  const inputContent = inputFilePath ? readInputFile(inputFilePath) : "";
   const promptWithInput = constructPromptWithInput(
     prompt,
     inputFilePath,
@@ -32,44 +32,46 @@ async function main() {
     modelName,
     temperature
   );
-  const codeBlocks = extractCodeBlocks(completion);
 
-  if (codeBlocks.length > 0) {
-    for (const { language, codeBlock } of codeBlocks) {
-      console.log(chalk.white("Code block found:"));
-      console.log(chalk.green(codeBlock));
+  if (outputFilePath) {
+    const codeBlocks = extractCodeBlocks(completion);
 
-      const confirmed = await confirmWriteToFile(language);
-      if (confirmed) {
-        fs.writeFileSync(outputFilePath, codeBlock, "utf-8");
-        console.log(chalk.white(`Code block written to ${outputFilePath}`));
-      } else {
-        console.log(chalk.white("Operation aborted by the user."));
+    if (codeBlocks.length > 0) {
+      for (const { language, codeBlock } of codeBlocks) {
+        console.log(chalk.white("Code block found:"));
+        console.log(chalk.green(codeBlock));
+
+        const confirmed = await confirmWriteToFile(language);
+        if (confirmed) {
+          fs.writeFileSync(outputFilePath, codeBlock, "utf-8");
+          console.log(chalk.white(`Code block written to ${outputFilePath}`));
+        } else {
+          console.log(chalk.white("Operation aborted by the user."));
+        }
       }
+    } else {
+      console.log(chalk.red("No code block found in the completion."));
     }
-  } else {
-    console.log(chalk.red("No code block found in the completion."));
   }
 }
 
 function configureCommandLineArguments() {
   const args = yargs(hideBin(process.argv))
+    .option("p", {
+      alias: "prompt",
+      type: "string",
+      demandOption: true,
+      description: "Prompt for LLM chat completion",
+    })
     .option("i", {
       alias: "input",
       type: "string",
-      demandOption: true,
       description: "Input file path",
     })
     .option("o", {
       alias: "output",
       type: "string",
       description: "Output file path",
-    })
-    .option("p", {
-      alias: "prompt",
-      type: "string",
-      demandOption: true,
-      description: "Prompt for LLM chat completion",
     })
     .option("m", {
       alias: "model",
@@ -100,20 +102,15 @@ function configureCommandLineArguments() {
     prompt: args.p,
     modelName: args.m,
     temperature: args.t,
-    help: args.h,
   };
 }
 
 function displayHelpMessage() {
   console.log(chalk.yellow("Usage: codemancer [options]"));
   console.log("\nOptions:");
-  console.log("  -i, --input <path>       Input file path (required)");
-  console.log(
-    "  -o, --output <path>      Output file path (default: input file path)"
-  );
-  console.log(
-    "  -p, --prompt <text>      Prompt for LLM chat completion (required)"
-  );
+  console.log("  -p, --prompt <text>      Prompt for LLM (required)");
+  console.log("  -i, --input <path>       Input file path (optional)");
+  console.log("  -o, --output <path>      Output file path (optional)");
   console.log("  -m, --model <name>       Model name (default: gpt-4)");
   console.log("  -t, --temperature <num>  Model temperature (default: 0)");
   console.log("  -h, --help               Display help message");
@@ -124,7 +121,8 @@ function readInputFile(inputFilePath) {
 }
 
 function constructPromptWithInput(prompt, inputFilePath, inputContent) {
-  return `
+  if (inputFilePath) {
+    return `
 ${prompt}
 
 ### ${inputFilePath}:
@@ -132,6 +130,9 @@ ${prompt}
 ${inputContent}
 \`\`\`
 `;
+  } else {
+    return prompt;
+  }
 }
 
 async function getLLMCompletion(prompt, model, temperature) {
