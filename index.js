@@ -16,8 +16,14 @@ if (!OPENAI_API_KEY) {
 
 async function main() {
   const argv = configureCommandLineArguments();
-  const { inputFilePath, outputFilePath, prompt, modelName, temperature } =
-    argv;
+  const {
+    inputFilePath,
+    outputFilePath,
+    prompt,
+    modelName,
+    temperature,
+    silenceLevel,
+  } = argv;
 
   const inputContent = inputFilePath ? readInputFile(inputFilePath) : "";
   const promptWithInput = constructPromptWithInput(
@@ -25,7 +31,9 @@ async function main() {
     inputFilePath,
     inputContent
   );
-  console.log(chalk.cyan(promptWithInput));
+  if (silenceLevel > 2) {
+    console.log(chalk.cyan(promptWithInput));
+  }
 
   const completion = await getLLMCompletion(
     promptWithInput,
@@ -38,19 +46,27 @@ async function main() {
 
     if (codeBlocks.length > 0) {
       for (const { language, codeBlock } of codeBlocks) {
-        console.log(chalk.white("Code block found:"));
-        console.log(chalk.green(codeBlock));
+        if (silenceLevel > 1) {
+          console.log(chalk.white("Code block found:"));
+          console.log(chalk.green(codeBlock));
+        }
 
-        const confirmed = await confirmWriteToFile(language);
+        const confirmed = await confirmWriteToFile(language, silenceLevel);
         if (confirmed) {
           fs.writeFileSync(outputFilePath, codeBlock, "utf-8");
-          console.log(chalk.white(`Code block written to ${outputFilePath}`));
+          if (silenceLevel > 0) {
+            console.log(chalk.white(`Code block written to ${outputFilePath}`));
+          }
         } else {
-          console.log(chalk.white("Operation aborted by the user."));
+          if (silenceLevel > 0) {
+            console.log(chalk.white("Operation aborted by the user."));
+          }
         }
       }
     } else {
-      console.log(chalk.red("No code block found in the completion."));
+      if (silenceLevel > 0) {
+        console.log(chalk.red("No code block found in the completion."));
+      }
     }
   }
 }
@@ -85,6 +101,12 @@ function configureCommandLineArguments() {
       default: 0,
       description: "Temperature",
     })
+    .option("s", {
+      alias: "silence",
+      type: "number",
+      default: 3,
+      description: "Silence level (0-3)",
+    })
     .option("h", {
       alias: "help",
       type: "boolean",
@@ -102,6 +124,7 @@ function configureCommandLineArguments() {
     prompt: args.p,
     modelName: args.m,
     temperature: args.t,
+    silenceLevel: args.s,
   };
 }
 
@@ -113,6 +136,7 @@ function displayHelpMessage() {
   console.log("  -o, --output <path>      Output file path (optional)");
   console.log("  -m, --model <name>       Model name (default: gpt-4)");
   console.log("  -t, --temperature <num>  Model temperature (default: 0)");
+  console.log("  -s, --silence <num>      Silence level (0-3, default: 3)");
   console.log("  -h, --help               Display help message");
 }
 
@@ -227,9 +251,14 @@ function extractCodeBlocks(completion) {
   return codeBlocks;
 }
 
-function confirmWriteToFile(language) {
+function confirmWriteToFile(language, silenceLevel) {
   return new Promise((resolve) => {
     process.stdin.resume();
+
+    if (silenceLevel === 0) {
+      resolve(true);
+    }
+
     process.stdout.write(
       chalk.white(
         `Do you want to write this ${
