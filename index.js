@@ -77,7 +77,7 @@ function configureCommandLineArguments() {
       alias: "prompt",
       type: "string",
       demandOption: true,
-      description: "Prompt for LLM chat completion",
+      description: "Prompt for LLM completion",
     })
     .option("i", {
       alias: "input",
@@ -99,24 +99,14 @@ function configureCommandLineArguments() {
       alias: "temperature",
       type: "number",
       default: 0,
-      description: "Temperature",
+      description: "Temperature (0-2)",
     })
     .option("s", {
       alias: "verbosity",
       type: "number",
       default: 1,
       description: "Verbosity (0-3)",
-    })
-    .option("h", {
-      alias: "help",
-      type: "boolean",
-      description: "Display help message",
     }).argv;
-
-  if (args.help) {
-    displayHelpMessage();
-    process.exit(0);
-  }
 
   return {
     inputFilePath: args.i,
@@ -126,18 +116,6 @@ function configureCommandLineArguments() {
     temperature: args.t,
     verbosity: args.s,
   };
-}
-
-function displayHelpMessage() {
-  console.log(chalk.yellow("Usage: codemancer [options]"));
-  console.log("\nOptions:");
-  console.log("  -p, --prompt <text>      Prompt for LLM (required)");
-  console.log("  -i, --input <path>       Input file path (optional)");
-  console.log("  -o, --output <path>      Output file path (optional)");
-  console.log("  -m, --model <name>       Model name (default: gpt-4)");
-  console.log("  -t, --temperature <num>  Model temperature (default: 0)");
-  console.log("  -s, --verbosity <num>    Verbosity (0-3, default: 1)");
-  console.log("  -h, --help               Display help message");
 }
 
 function readInputFile(inputFilePath) {
