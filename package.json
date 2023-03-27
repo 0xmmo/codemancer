@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "description": "Unleash the coding power of GPTs from your command line. Effortlessly feed entire files to GPT-4 to modify them as prompted. Write the generated code back to the file or save as a copy.",
   "main": "index.js",
+  "bin": {
+    "codemancer": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mohamed Moustafa (mmoustafa.com)",
+  "license": "GPL",
   "dependencies": {
     "chalk": "^4.1.2",
     "eventsource-parser": "^1.0.0",

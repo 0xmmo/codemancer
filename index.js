@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require("fs");
 const fetch = require("node-fetch");
 const { createParser } = require("eventsource-parser");
