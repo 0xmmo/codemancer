@@ -1,6 +1,6 @@
 {
   "name": "codemancer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Prompt GPTs with your code and save output directly from the command line.",
   "main": "index.js",
   "bin": {
