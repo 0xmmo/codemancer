@@ -6,7 +6,7 @@
 
 You can use it as a versatile and efficient AI-powered programming assistant that simplifies code generation, streamlines development tasks, and boosts productivity.
 
-https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4
+![demo video](https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4)
 
 <br />
 
