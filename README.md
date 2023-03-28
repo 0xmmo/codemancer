@@ -65,7 +65,7 @@ codemancer -p "what's a bulletproof regex for validating emails"
 codemancer -i input_file_path -m gpt-3.5-turbo -t 0.5 -p "change all variable names to obscure animals"
 ```
 
-## Limitations:
+## Limitations
 
 - The file content + prompt are currently limited to 8K tokens for GPT-4. If your file is too large/dense and you exceed this limit you will get a 400 error.
 - If there are multiple code blocks returned in the completion, codemancer will present a confirmation message for each and write only the accepted one. If the verbosity argument is set to 0, it will auto-confirm and write the first code block it encounters to the output file.

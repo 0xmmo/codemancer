@@ -104,7 +104,7 @@ function configureCommandLineArguments() {
     .option("s", {
       alias: "verbosity",
       type: "number",
-      default: 1,
+      default: 3,
       description: "Verbosity (0-3)",
     }).argv;
 
@@ -149,7 +149,7 @@ async function getLLMCompletion(prompt, model, temperature) {
     messages: [
       {
         role: "system",
-        content: `You are a sophisticated, accurate, and modern AI programming assistant. Whenever you are prompted with a file to modify, you always return the complete code ready to run without any placeholders and including the unchanged code.`,
+        content: `You are a sophisticated, accurate, and modern AI programming assistant. Whenever you are prompted with a file to modify, you always return the complete code in a fenced code block ready to run without any placeholders and including the unchanged code.`,
       },
       {
         role: "user",

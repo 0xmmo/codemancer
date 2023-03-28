@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>codemancer: Code with GPT-4 from your command line</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #2c2c2c;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2.5rem;
+        color: #bc71c9;
+        margin-bottom: 1rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+        color: #bc71c9;
+        margin-bottom: 1rem;
+      }
+      p {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+      a {
+        color: #bc71c9;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      pre {
+        background-color: #424242;
+        padding: 1rem;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      .logo {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+      .github-star {
+        display: inline-block;
+        vertical-align: baseline;
+        margin-left: 1.5rem;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">🧙‍♂️ codemancer</div>
+      <div class="github-star">
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=0xmmo&repo=codemancer&type=star&count=true"
+          frameborder="0"
+          scrolling="0"
+          width="100"
+          height="20"
+          title="GitHub"
+        ></iframe>
+      </div>
+      <h1>Code with GPT-4 from your command line</h1>
+      <p>
+        <code>codemancer</code> is a command line tool that uses the OpenAI API
+        to generate code based on a given prompt and input file. You can use it
+        to change code in-place or create new files.
+      </p>
+      <p>
+        You can use it as a versatile and efficient AI-powered programming
+        assistant that simplifies code generation, streamlines development
+        tasks, and boosts productivity.
+      </p>
+      <img
+        src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
+        alt="codemancer demo"
+      />
+      <h2>Installation</h2>
+      <pre>npm install -g codemancer</pre>
+      <h2>Usage</h2>
+      <p>
+        To use codemancer, you need to set the
+        <code>OPENAI_API_KEY</code> environment variable with
+        <a href="https://platform.openai.com/account/api-keys"
+          >your OpenAI API key</a
+        >.
+      </p>
+      <pre>export OPENAI_API_KEY=your_api_key_here</pre>
+      <p>
+        ⚠️ <code>codemancer</code> works best using GPT-4, and will use it by
+        default. If you do not have access and receive a 404, you can use the
+        GPT-3.5 model instead via <code>-m "gpt-3.5-turbo"</code>, but code
+        generations will be much less reliable.
+      </p>
+      <h3>Reading and writing to the same file</h3>
+      <pre>
+codemancer -i input_file_path -p "break the /recipe/&lt;id&gt; route into /recipe/&lt;id&gt;/info and /recipe/&lt;id&gt;/image"</pre
+      >
+      <h3>Reading and writing to a different file</h3>
+      <pre>
+codemancer -i input_file_path -o output_file_path -p "extract inlined types into interfaces in a separate file"</pre
+      >
+      <h3>Writing from prompt to file</h3>
+      <pre>
+codemancer -o output_file_path -p "I need an AppleScript to wipe Safari history on restart"</pre
+      >
+      <h3>Simple prompting</h3>
+      <pre>
+codemancer -p "what's a bulletproof regex for validating emails"</pre
+      >
+      <h3>Customizing model and temperature</h3>
+      <pre>
+codemancer -i input_file_path -m gpt-3.5-turbo -t 0.5 -p "change all variable names to obscure animals"</pre
+      >
+      <h2>Limitations</h2>
+      <ul>
+        <li>
+          If there are multiple code blocks returned in the completion,
+          codemancer will present a confirmation message for each and write only
+          the accepted one. If the verbosity argument is set to 0, it will
+          auto-confirm and write the first code block it encounters to the
+          output file.
+        </li>
+        <li>
+          The file content + prompt are currently limited to 8K tokens for
+          GPT-4. If your file is too large/dense and you exceed this limit you
+          will get a 400 error.
+        </li>
+      </ul>
+      <h2>License</h2>
+      <p>
+        GPL License - This code was largely written by AI with some human
+        guidance.
+      </p>
+      <hr />
+      <div class="footer">
+        <p>Made with 🧙‍♂️ by <a href="https://twitter.com/0xmmo">@0xmmo</a></p>
+        <a href="https://www.buymeacoffee.com/0xmmo" target="_blank">
+          <img
+            src="https://cdn.buymeacoffee.com/buttons/default-orange.png"
+            alt="Buy Me A Coffee"
+            height="41"
+            width="174"
+          />
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
