@@ -7,11 +7,15 @@ const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const chalk = require("chalk");
 
+let OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
 if (!OPENAI_API_KEY) {
-  console.error(chalk.red("Error: OPENAI_API_KEY not set."));
-  process.exit(1);
+  OPENAI_API_URL = "https://api.codemancer.codes/v1/chat/completions";
+  console.error(
+    chalk.red(
+      "Warning: OPENAI_API_KEY not set. Using free codemancer OpenAI proxy, which is slower and rate limited."
+    )
+  );
 }
 
 async function main() {
@@ -104,7 +108,7 @@ function configureCommandLineArguments() {
     .option("s", {
       alias: "verbosity",
       type: "number",
-      default: 3,
+      default: 2,
       description: "Verbosity (0-3)",
     }).argv;
 
@@ -160,7 +164,7 @@ async function getLLMCompletion(prompt, model, temperature) {
     n: 1,
   });
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch(OPENAI_API_URL, {
     headers,
     method: "POST",
     body,
@@ -169,14 +173,17 @@ async function getLLMCompletion(prompt, model, temperature) {
   return handleAPIResponse(response);
 }
 
-function handleAPIResponse(response) {
+async function handleAPIResponse(response) {
   const decoder = new TextDecoder();
 
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let completionText = "";
 
     if (!response.ok) {
-      reject(`OpenAI API error: ${response.status} ${response.statusText}`);
+      const responseBody = await response.text();
+      reject(
+        `API error: ${response.status} ${response.statusText}\nResponse body: ${responseBody}`
+      );
     }
 
     const parser = createParser((event) => {
