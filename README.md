@@ -6,6 +6,8 @@
 
 You can use it as a versatile and efficient AI-powered programming assistant that simplifies code generation, streamlines development tasks, and boosts productivity.
 
+> 💫 You can now try `codemancer` with our own (free but rate-limited) OpenAI GPT-4 proxy.
+
 ![demo video](https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4)
 
 <br />
@@ -18,13 +20,13 @@ npm install -g codemancer
 
 ## Usage
 
-To use codemancer, you need to set the `OPENAI_API_KEY` environment variable with [your OpenAI API key](https://platform.openai.com/account/api-keys).
+To use `codemancer` with [your own OpenAI API key](https://platform.openai.com/account/api-keys), you need to set the `OPENAI_API_KEY` environment variable.
 
 ```bash
 export OPENAI_API_KEY=your_api_key_here
 ```
 
-> ⚠️ `codemancer` works best using GPT-4, and will use it by default. If you do not have access and receive a 404, you can use the GPT-3.5 model instead via `-m "gpt-3.5-turbo"`, but code generations will be much less reliable.
+`codemancer` works best using GPT-4, and will use it by default. If you do not have access and receive a 404, you can use the GPT-3.5 model instead via `-m "gpt-3.5-turbo"`, but code generations will be much less reliable.
 
 <br />
 

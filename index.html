@@ -68,6 +68,10 @@
         text-align: center;
         margin-top: 2rem;
       }
+      .alert {
+        padding: 1rem;
+        background: rgba(255, 255, 0, 0.1);
+      }
     </style>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </head>
@@ -95,6 +99,10 @@
         assistant that simplifies code generation, streamlines development
         tasks, and boosts productivity.
       </p>
+      <p class="alert">
+        💫 You can now try <code>codemancer</code> with our own (free but
+        rate-limited) OpenAI proxy, with GPT-4 enabled.
+      </p>
       <img
         src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
         alt="codemancer demo"
@@ -103,15 +111,14 @@
       <pre>npm install -g codemancer</pre>
       <h2>Usage</h2>
       <p>
-        To use codemancer, you need to set the
-        <code>OPENAI_API_KEY</code> environment variable with
+        To use <code>codemancer</code> with
         <a href="https://platform.openai.com/account/api-keys"
-          >your OpenAI API key</a
-        >.
+          >your own OpenAI API key</a
+        >, you need to set the <code>OPENAI_API_KEY</code> environment variable.
       </p>
       <pre>export OPENAI_API_KEY=your_api_key_here</pre>
       <p>
-        ⚠️ <code>codemancer</code> works best using GPT-4, and will use it by
+        <code>codemancer</code> works best using GPT-4, and will use it by
         default. If you do not have access and receive a 404, you can use the
         GPT-3.5 model instead via <code>-m "gpt-3.5-turbo"</code>, but code
         generations will be much less reliable.
