@@ -21,7 +21,7 @@ if (!OPENAI_API_KEY) {
 async function main() {
   const argv = configureCommandLineArguments();
   const {
-    inputFilePath,
+    inputFilePaths,
     outputFilePath,
     prompt,
     modelName,
@@ -29,11 +29,11 @@ async function main() {
     verbosity,
   } = argv;
 
-  const inputContent = inputFilePath ? readInputFile(inputFilePath) : "";
+  const inputContents = inputFilePaths.map((path) => readInputFile(path));
   const promptWithInput = constructPromptWithInput(
     prompt,
-    inputFilePath,
-    inputContent
+    inputFilePaths,
+    inputContents
   );
   if (verbosity > 2) {
     console.log(chalk.cyan(promptWithInput));
@@ -86,7 +86,7 @@ function configureCommandLineArguments() {
     .option("i", {
       alias: "input",
       type: "string",
-      description: "Input file path",
+      description: "Input file paths, separated by commas",
     })
     .option("o", {
       alias: "output",
@@ -112,9 +112,12 @@ function configureCommandLineArguments() {
       description: "Verbosity (0-3)",
     }).argv;
 
+  const inputFilePaths = args.i ? args.i.split(",") : [];
+  const outputFilePath = args.o || inputFilePaths[0];
+
   return {
-    inputFilePath: args.i,
-    outputFilePath: args.o || args.i,
+    inputFilePaths,
+    outputFilePath,
     prompt: args.p,
     modelName: args.m,
     temperature: args.t,
@@ -126,19 +129,19 @@ function readInputFile(inputFilePath) {
   return fs.readFileSync(inputFilePath, "utf-8");
 }
 
-function constructPromptWithInput(prompt, inputFilePath, inputContent) {
-  if (inputFilePath) {
-    return `
-${prompt}
+function constructPromptWithInput(prompt, inputFilePaths, inputContents) {
+  let promptWithInput = prompt;
 
-### ${inputFilePath}:
+  for (let i = 0; i < inputFilePaths.length; i++) {
+    promptWithInput += `
+### ${inputFilePaths[i]}:
 \`\`\`
-${inputContent}
+${inputContents[i]}
 \`\`\`
 `;
-  } else {
-    return prompt;
   }
+
+  return promptWithInput;
 }
 
 async function getLLMCompletion(prompt, model, temperature) {
