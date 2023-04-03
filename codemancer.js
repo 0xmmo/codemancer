@@ -55,11 +55,12 @@ async function main() {
           console.log(chalk.green(codeBlock));
         }
 
-        const confirmed = await confirmWriteToFile(language, verbosity);
+        const confirmed = await confirmWriteToFile(language, verbosity, outputFilePath);
         if (confirmed) {
-          fs.writeFileSync(outputFilePath, codeBlock, "utf-8");
+          const newPath = confirmed === true ? outputFilePath : confirmed;
+          fs.writeFileSync(newPath, codeBlock, "utf-8");
           if (verbosity > 0) {
-            console.log(chalk.white(`Code block written to ${outputFilePath}`));
+            console.log(chalk.white(`Code block written to ${newPath}`));
           }
         } else {
           if (verbosity > 0) {
@@ -239,7 +240,7 @@ function extractCodeBlocks(completion) {
   return codeBlocks;
 }
 
-function confirmWriteToFile(language, verbosity) {
+function confirmWriteToFile(language, verbosity, outputFilePath) {
   return new Promise((resolve) => {
     process.stdin.resume();
 
@@ -251,13 +252,25 @@ function confirmWriteToFile(language, verbosity) {
       chalk.white(
         `Do you want to write this ${
           language || "unspecified language"
-        } code block to the output file? (yes/no): `
+        } code block to ${outputFilePath}? (yes (y) / skip (s) / enter output path (o)): `
       )
     );
 
     process.stdin.once("data", (data) => {
       const answer = data.toString().trim().toLowerCase();
-      resolve(answer === "yes" || answer === "y");
+      if (answer === "yes" || answer === "y") {
+        resolve(true);
+      } else if (answer === "skip" || answer === "s") {
+        resolve(false);
+      } else if (answer === "enter output path" || answer === "o") {
+        process.stdout.write(chalk.white("Enter the new output file path: "));
+        process.stdin.once("data", (data) => {
+          const newPath = data.toString().trim();
+          resolve(newPath);
+        });
+      } else {
+        resolve(false);
+      }
     });
   });
 }
