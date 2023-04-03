@@ -55,13 +55,14 @@ async function main() {
           console.log(chalk.green(codeBlock));
         }
 
-        const confirmed = await confirmWriteToFile(language, verbosity, outputFilePath);
+        const confirmed = await handleUserInput(
+          language,
+          verbosity,
+          outputFilePath
+        );
         if (confirmed) {
           const newPath = confirmed === true ? outputFilePath : confirmed;
-          fs.writeFileSync(newPath, codeBlock, "utf-8");
-          if (verbosity > 0) {
-            console.log(chalk.white(`Code block written to ${newPath}`));
-          }
+          writeCodeBlockToFile(newPath, codeBlock, verbosity);
         } else {
           if (verbosity > 0) {
             console.log(chalk.white("Operation aborted by the user."));
@@ -151,7 +152,19 @@ async function getLLMCompletion(prompt, model, temperature) {
     Authorization: `Bearer ${OPENAI_API_KEY}`,
   };
 
-  const body = JSON.stringify({
+  const body = constructRequestBody(prompt, model, temperature);
+
+  const response = await fetch(OPENAI_API_URL, {
+    headers,
+    method: "POST",
+    body,
+  });
+
+  return handleAPIResponse(response);
+}
+
+function constructRequestBody(prompt, model, temperature) {
+  return JSON.stringify({
     model,
     temperature,
     messages: [
@@ -167,14 +180,6 @@ async function getLLMCompletion(prompt, model, temperature) {
     stream: true,
     n: 1,
   });
-
-  const response = await fetch(OPENAI_API_URL, {
-    headers,
-    method: "POST",
-    body,
-  });
-
-  return handleAPIResponse(response);
 }
 
 async function handleAPIResponse(response) {
@@ -240,7 +245,7 @@ function extractCodeBlocks(completion) {
   return codeBlocks;
 }
 
-function confirmWriteToFile(language, verbosity, outputFilePath) {
+async function handleUserInput(language, verbosity, outputFilePath) {
   return new Promise((resolve) => {
     process.stdin.resume();
 
@@ -252,25 +257,49 @@ function confirmWriteToFile(language, verbosity, outputFilePath) {
       chalk.white(
         `Do you want to write this ${
           language || "unspecified language"
-        } code block to ${outputFilePath}? (yes (y) / skip (s) / enter output path (o)): `
+        } code block to ${outputFilePath}? (yes - y / skip - s / enter output path - o): `
       )
     );
 
-    process.stdin.once("data", (data) => {
+    process.stdin.once("data", async (data) => {
       const answer = data.toString().trim().toLowerCase();
       if (answer === "yes" || answer === "y") {
         resolve(true);
       } else if (answer === "skip" || answer === "s") {
         resolve(false);
       } else if (answer === "enter output path" || answer === "o") {
-        process.stdout.write(chalk.white("Enter the new output file path: "));
-        process.stdin.once("data", (data) => {
-          const newPath = data.toString().trim();
-          resolve(newPath);
-        });
+        const newPath = await getOutputFilePath();
+        resolve(newPath);
       } else {
         resolve(false);
       }
+    });
+  });
+}
+
+async function writeCodeBlockToFile(newPath, codeBlock, verbosity) {
+  try {
+    fs.writeFileSync(newPath, codeBlock, "utf-8");
+    if (verbosity > 0) {
+      console.log(chalk.white(`Code block written to ${newPath}`));
+    }
+  } catch (error) {
+    console.error(chalk.red(`Error writing to file: ${error.message}`));
+    const newPath = await getOutputFilePath();
+    fs.writeFileSync(newPath, codeBlock, "utf-8");
+    if (verbosity > 0) {
+      console.log(chalk.white(`Code block written to ${newPath}`));
+    }
+  }
+}
+
+async function getOutputFilePath() {
+  return new Promise((resolve) => {
+    process.stdin.resume();
+    process.stdout.write(chalk.white("Enter the new output file path: "));
+    process.stdin.once("data", (data) => {
+      const newPath = data.toString().trim();
+      resolve(newPath);
     });
   });
 }
