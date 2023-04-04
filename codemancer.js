@@ -97,7 +97,7 @@ function configureCommandLineArguments() {
     .option("o", {
       alias: "output",
       type: "string",
-      description: "Output file path",
+      description: "Output file paths, separated by commas",
     })
     .option("m", {
       alias: "model",
