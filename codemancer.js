@@ -22,7 +22,7 @@ async function main() {
   const argv = configureCommandLineArguments();
   const {
     inputFilePaths,
-    outputFilePath,
+    outputFilePaths,
     prompt,
     modelName,
     temperature,
@@ -45,11 +45,14 @@ async function main() {
     temperature
   );
 
-  if (outputFilePath) {
+  if (outputFilePaths.length > 0) {
     const codeBlocks = extractCodeBlocks(completion);
 
     if (codeBlocks.length > 0) {
+      let cbidx = 0;
       for (const { language, codeBlock } of codeBlocks) {
+        const outputFilePath = outputFilePaths[cbidx] || outputFilePaths[0];
+
         if (verbosity > 1) {
           console.log(chalk.white("Code block found:"));
           console.log(chalk.green(codeBlock));
@@ -68,6 +71,7 @@ async function main() {
             console.log(chalk.white("Operation aborted by the user."));
           }
         }
+        cbidx++;
       }
     } else {
       if (verbosity > 0) {
@@ -115,11 +119,11 @@ function configureCommandLineArguments() {
     }).argv;
 
   const inputFilePaths = args.i ? args.i.split(",") : [];
-  const outputFilePath = args.o || inputFilePaths[0];
+  const outputFilePaths = args.o ? args.o.split(",") : inputFilePaths;
 
   return {
     inputFilePaths,
-    outputFilePath,
+    outputFilePaths,
     prompt: args.p,
     modelName: args.m,
     temperature: args.t,
@@ -255,9 +259,11 @@ async function handleUserInput(language, verbosity, outputFilePath) {
 
     process.stdout.write(
       chalk.white(
-        `Do you want to write this ${
+        `Do you want to write this ${chalk.yellow(
           language || "unspecified language"
-        } code block to ${outputFilePath}? (yes - y / skip - s / enter output path - o): `
+        )} code block to ${chalk.yellow(
+          outputFilePath
+        )}? \nyes (y) / skip (s) / enter output path (o): `
       )
     );
 
