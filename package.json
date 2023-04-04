@@ -1,6 +1,6 @@
 {
   "name": "codemancer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Code with GPT-4 from your command line",
   "main": "codemancer.js",
   "bin": {
