@@ -8,7 +8,7 @@ You can use it as a versatile and efficient AI-powered programming assistant tha
 
 > 💫 You can now try `codemancer` with our own (free but rate-limited) OpenAI GPT-4 proxy.
 
-![demo video](https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4)
+https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4
 
 <br />
 
