@@ -80,7 +80,3 @@ codemancer -i input_file_path -m gpt-3.5-turbo -t 0.5 -p "change all variable na
 GPL License - This code was largely written by AI with some human guidance.
 
 <br />
-
-<br />
-
-<a href="https://www.buymeacoffee.com/0xmmo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
