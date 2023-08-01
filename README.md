@@ -1,6 +1,6 @@
 # 🧙‍♂ codemancer
 
-### _Develop 10x faster with GPT-4 in your command line._
+### _Develop 10x faster with GPT-4, write and modify code from the command line._
 
 `codemancer` is a command line tool that uses the OpenAI API to generate code based on a given prompt and input file. It can change code in-place or create brand new files.
 
