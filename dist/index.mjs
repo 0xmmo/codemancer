@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
 // src/index.ts
 import fs from "fs";
@@ -9,7 +9,7 @@ import { hideBin } from "yargs/helpers";
 import chalk from "chalk";
 import { exec } from "child_process";
 var modifyInstruction = `You are a sophisticated, accurate, and modern AI programming assistant. Whenever you are prompted with a file to modify, you always return the complete code in a fenced code block ready to run without any placeholders and including the unchanged code.`;
-var identifyPlaceholdersInstruction = `Below is the code output by an AI programming assistant. This code may contain one or multiple placeholders that the AI creates to be filled in by the user. Please identify and list all the placeholders in this code. Examples: "Rest of the code remains the same..." OR "YOUR CODE HERE" OR "Existing function code ..."`;
+var identifyPlaceholdersInstruction = `Below is the code output by an AI programming assistant. This code may contain one or multiple placeholders that the AI creates to be filled in by the user. Please identify and list all the placeholders in this code. For example: "// ...", "Rest of the code remains the same...", "YOUR CODE HERE", "Existing function code ...", etc.`;
 var OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 var OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) {
@@ -46,7 +46,7 @@ async function main() {
     temperature
   );
   if (outputFilePaths.length > 0) {
-    const codeBlocks = await extractCodeBlocks(completion, modelName);
+    const codeBlocks = await extractCodeBlocks(completion);
     if (codeBlocks.length > 0) {
       let cbidx = 0;
       for (const { language, codeBlock } of codeBlocks) {
@@ -55,6 +55,21 @@ async function main() {
           console.log(chalk.white("Code block found:"));
           console.log(chalk.green(codeBlock));
         }
+        process.stdout.write(chalk.white("Identifying placeholders:"));
+        const placeholders = await getLLMCompletion(
+          identifyPlaceholdersInstruction,
+          `${constructPromptWithInput(
+            "",
+            ["Original Code", "LLM Generated Code"],
+            [
+              inputContents[cbidx],
+              // This should be the final decided outputFilePath contents
+              codeBlock
+            ]
+          )}`,
+          "gpt-3.5-turbo",
+          0
+        );
         const confirmed = await handleUserInput(
           language,
           verbosity,
@@ -223,7 +238,7 @@ Response body: ${responseBody}`
     });
   });
 }
-async function extractCodeBlocks(completion, modelName) {
+async function extractCodeBlocks(completion) {
   const codeBlockRegex = /^```([a-z]*)?\s^([\s\S]*?)^```/gm;
   const matches = completion.matchAll(codeBlockRegex);
   const codeBlocks = [];
@@ -231,15 +246,6 @@ async function extractCodeBlocks(completion, modelName) {
     for (const match of matches) {
       codeBlocks.push({ language: match[1], codeBlock: match[2] });
     }
-  }
-  for (const block of codeBlocks) {
-    const placeholders = await getLLMCompletion(
-      identifyPlaceholdersInstruction,
-      block.codeBlock,
-      modelName,
-      0
-    );
-    console.log(chalk.white(`Placeholders found: ${placeholders}`));
   }
   return codeBlocks;
 }

@@ -19,6 +19,7 @@
   "author": "Mohamed Moustafa (mmoustafa.com)",
   "license": "GPL",
   "dependencies": {
+    "190proof": "^1.0.4",
     "chalk": "^4.1.2",
     "eventsource-parser": "^1.0.0",
     "node-fetch": "^2.6.9",
