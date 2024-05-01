@@ -1,6 +1,6 @@
 # 🧙‍♂ codemancer
 
-### _Coding superpowers with GPT-4 in your command line._
+### _Develop 10x faster with GPT-4, write and modify code from the command line._
 
 `codemancer` is a command line tool that uses the OpenAI API to generate code based on a given prompt and input file. It can change code in-place or create brand new files.
 
@@ -8,7 +8,7 @@ You can use it as a versatile and efficient AI-powered programming assistant tha
 
 > 💫 You can now try `codemancer` with our own (free but rate-limited) OpenAI GPT-4 proxy.
 
-![demo video](https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4)
+https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4
 
 <br />
 
@@ -80,7 +80,3 @@ codemancer -i input_file_path -m gpt-3.5-turbo -t 0.5 -p "change all variable na
 GPL License - This code was largely written by AI with some human guidance.
 
 <br />
-
-<br />
-
-<a href="https://www.buymeacoffee.com/0xmmo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
