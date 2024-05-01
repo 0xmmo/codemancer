@@ -1,13 +1,20 @@
 {
   "name": "codemancer",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Code with GPT-4 from your command line",
-  "main": "codemancer.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "codemancer": "./codemancer.js"
+    "codemancer": "./dist/index.js",
+    "cm": "./dist/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watch",
+    "build": "tsup"
   },
   "author": "Mohamed Moustafa (mmoustafa.com)",
   "license": "GPL",
@@ -15,7 +22,8 @@
     "chalk": "^4.1.2",
     "eventsource-parser": "^1.0.0",
     "node-fetch": "^2.6.9",
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2",
+    "zod": "^3.23.5"
   },
   "keywords": [
     "command",
@@ -28,5 +36,11 @@
     "gpt-3.5-turbo",
     "codegen",
     "popular"
-  ]
+  ],
+  "devDependencies": {
+    "@types/yargs": "^17.0.32",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
 }
