@@ -1,179 +1,268 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>codemancer: Code with GPT-4 from your command line</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Roboto", sans-serif;
-        background-color: #2c2c2c;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-      }
-      h1 {
-        font-size: 2.5rem;
-        color: #bc71c9;
-        margin-bottom: 1rem;
-      }
-      h2 {
-        font-size: 1.5rem;
-        color: #bc71c9;
-        margin-bottom: 1rem;
-      }
-      p {
-        font-size: 1rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-      }
-      a {
-        color: #bc71c9;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      pre {
-        background-color: #424242;
-        padding: 1rem;
-        overflow-x: auto;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-      }
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-      .logo {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        display: inline-block;
-        margin-right: 1.5rem;
-      }
-      .github-star {
-        display: inline-block;
-        vertical-align: text-bottom;
-      }
-      .footer {
-        text-align: center;
-        margin-top: 2rem;
-      }
-      .alert {
-        padding: 1rem;
-        background: rgba(255, 255, 0, 0.1);
-      }
-    </style>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <div class="logo">🧙‍♂️ codemancer</div>
-      <div class="github-star">
-        <a
-          class="github-button"
-          href="https://github.com/0xmmo/codemancer"
-          data-size="large"
-          data-show-count="true"
-          aria-label="Star 0xmmo/codemancer on GitHub"
-          >Star</a
-        >
-      </div>
-      <h1>Code with GPT-4 from your command line</h1>
-      <p>
-        <code>codemancer</code> is a command line tool that uses the OpenAI API
-        to generate code based on a given prompt and input file. It can change
-        code in-place or create brand new files.
-      </p>
-      <p>
-        You can use it as a versatile and efficient AI-powered programming
-        assistant that simplifies code generation, streamlines development
-        tasks, and boosts productivity.
-      </p>
-      <p class="alert">
-        💫 You can now try <code>codemancer</code> with our own (free but
-        rate-limited) OpenAI proxy, with GPT-4 enabled.
-      </p>
-      <video width="100%" autoplay controls>
-        <source
-          src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
-          type="video/mp4"
-        />
-        <img
-          src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
-          alt="codemancer demo"
-          title="Your browser does not support HTML video."
-        />
-      </video>
-      <h2>Installation</h2>
-      <pre>npm install -g codemancer</pre>
-      <h2>Usage</h2>
-      <p>
-        To use <code>codemancer</code> with
-        <a href="https://platform.openai.com/account/api-keys"
-          >your own OpenAI API key</a
-        >, you need to set the <code>OPENAI_API_KEY</code> environment variable.
-      </p>
-      <pre>export OPENAI_API_KEY=your_api_key_here</pre>
-      <p>
-        <code>codemancer</code> works best using GPT-4, and will use it by
-        default. If you do not have access and receive a 404, you can use the
-        GPT-3.5 model instead via <code>-m "gpt-3.5-turbo"</code>, but code
-        generations will be much less reliable.
-      </p>
-      <h3>Reading and writing to the same file</h3>
-      <pre>
-codemancer -i input_file_path -p "break the /recipe/&lt;id&gt; route into /recipe/&lt;id&gt;/info and /recipe/&lt;id&gt;/image"</pre
-      >
-      <h3>Reading and writing to a different file</h3>
-      <pre>
-codemancer -i input_file_path -o output_file_path -p "extract inlined types into interfaces in a separate file"</pre
-      >
-      <h3>Writing from prompt to file</h3>
-      <pre>
-codemancer -o output_file_path -p "I need an AppleScript to wipe Safari history on restart"</pre
-      >
-      <h3>Simple prompting</h3>
-      <pre>
-codemancer -p "what's a bulletproof regex for validating emails"</pre
-      >
-      <h3>Customizing model and temperature</h3>
-      <pre>
-codemancer -i input_file_path -m gpt-3.5-turbo -t 0.5 -p "change all variable names to obscure animals"</pre
-      >
-      <h2>Limitations</h2>
-      <ul>
-        <li>
-          If there are multiple code blocks returned in the completion,
-          codemancer will present a confirmation message for each and write only
-          the accepted one. If the verbosity argument is set to 0, it will
-          auto-confirm and write the first code block it encounters to the
-          output file.
-        </li>
-        <li>
-          The file content + prompt are currently limited to 8K tokens for
-          GPT-4. If your file is too large/dense and you exceed this limit you
-          will get a 400 error.
-        </li>
-      </ul>
-      <h2>License</h2>
-      <p>
-        GPL License - This code was largely written by AI with some human
-        guidance.
-      </p>
-      <hr />
-      <div class="footer">
-        <p>Made with 🧙‍♂️ by <a href="https://github.com/0xmmo/">@0xmmo</a></p>
-      </div>
-    </div>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codemancer — Code with LLMs from your command line</title>
+<meta name="description" content="A command-line tool that uses OpenAI to generate code from a prompt + input file. Change code in-place or write new files." />
+<meta name="author" content="Mohamed Moustafa">
+<meta property="og:title" content="Codemancer — Code with LLMs from your command line">
+<meta property="og:description" content="A command-line tool that uses OpenAI to generate code from a prompt + input file.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://codemancer.codes/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@0xmmo">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Space Mono", monospace;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    line-height: 1.55;
+    font-size: 15px;
+    color: #111;
+    background: #fff;
+  }
+  a { color: #2563eb; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .topnav {
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .topnav a { color: #666; }
+  .topnav a:hover { color: #111; text-decoration: underline; }
+  .topnav-meta a { color: #999; }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 0.4rem;
+  }
+  h1.name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #111;
+  }
+  .lede {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  .lede code { background: #f3f4f6; padding: 1px 5px; border-radius: 2px; font-size: 0.92em; }
+
+  .install {
+    display: inline-flex;
+    align-items: stretch;
+    background: #111;
+    color: #f5f5f5;
+    font-family: inherit;
+    margin-bottom: 0.5rem;
+    max-width: 100%;
+  }
+  .install .prompt {
+    padding: 0.7rem 0.5rem 0.7rem 0.9rem;
+    color: #888;
+    border-right: 1px dashed rgba(245,245,245,0.2);
+  }
+  .install .cmd {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .install .copy {
+    padding: 0 0.9rem;
+    background: transparent;
+    border: none;
+    border-left: 1px dashed rgba(245,245,245,0.2);
+    color: #f5f5f5;
+    font-family: inherit;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 140ms ease;
+  }
+  .install .copy:hover, .install .copy.ok { background: #2563eb; }
+
+  .demo {
+    margin: 1.5rem 0 2.5rem;
+  }
+  .demo video {
+    width: 100%;
+    display: block;
+    border: 1px solid #ddd;
+  }
+
+  section { margin-bottom: 2.6rem; }
+  h2 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+  }
+  h3 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.6rem;
+  }
+  p { margin: 0 0 0.9rem; }
+  ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; }
+
+  code { background: #f3f4f6; padding: 1px 5px; border-radius: 2px; font-size: 0.92em; }
+  pre {
+    background: #111;
+    color: #f5f5f5;
+    padding: 1rem 1.1rem;
+    margin: 0.8rem 0 1.2rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    border-radius: 2px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    justify-content: space-between;
+  }
+  footer a { color: #555; }
+  footer a:hover { color: #111; text-decoration: underline; }
+
+  .links {
+    display: flex;
+    gap: 1.2rem;
+    margin: 2rem 0 0.5rem;
+  }
+  .links a { display: flex; align-items: center; }
+  .links svg { fill: #111; transition: opacity 0.15s; }
+  .links a:hover svg { opacity: 0.5; }
+
+  @media (max-width: 600px) {
+    body { padding: 2rem 1rem; font-size: 14px; }
+    .install { width: 100%; }
+    .install .copy { display: none; }
+    .install .cmd { white-space: normal; word-break: break-all; padding: 0.7rem 0.8rem; }
+    .install .prompt { padding: 0.7rem 0.6rem 0.7rem 0.8rem; }
+    pre { padding: 0.8rem 0.9rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="https://mmoustafa.com">← mmoustafa.com</a>
+    <span class="topnav-meta"><a href="https://github.com/0xmmo/codemancer">github&nbsp;↗</a></span>
+  </nav>
+
+  <span class="eyebrow">CLI&nbsp;&nbsp;·&nbsp;&nbsp;Node ≥ 18&nbsp;&nbsp;·&nbsp;&nbsp;GPL</span>
+  <h1 class="name">Codemancer</h1>
+
+  <p class="lede">
+    A command-line tool that uses OpenAI to generate code from a prompt and an input file. Change code in-place, write new files, or just ask questions. A versatile AI-powered programming assistant that streamlines tasks and boosts productivity.
+  </p>
+
+  <div class="install">
+    <span class="prompt">$</span>
+    <span class="cmd">npm install -g codemancer</span>
+    <button class="copy" data-copy="npm install -g codemancer" aria-label="Copy install command">copy</button>
+  </div>
+
+  <div class="demo">
+    <video autoplay loop muted playsinline controls>
+      <source
+        src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
+        type="video/mp4"
+      />
+      <img
+        src="https://user-images.githubusercontent.com/1714782/227892213-8cfdcbdb-3dae-4043-b155-9164e1104bc1.mp4"
+        alt="codemancer demo"
+        title="Your browser does not support HTML video."
+      />
+    </video>
+  </div>
+
+  <section>
+    <h2>Setup</h2>
+    <p>To use Codemancer with <a href="https://platform.openai.com/account/api-keys" target="_blank">your own OpenAI API key</a>, set <code>OPENAI_API_KEY</code> in your environment.</p>
+<pre>export OPENAI_API_KEY=your_api_key_here</pre>
+    <p>Defaults to GPT-4. If you don't have access and hit a 404, you can fall back to GPT-3.5 with <code>-m "gpt-3.5-turbo"</code> — code generation is less reliable on 3.5.</p>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+
+    <h3>Reading and writing to the same file</h3>
+<pre>codemancer -i input_file -p "break the /recipe/&lt;id&gt; route into /recipe/&lt;id&gt;/info and /recipe/&lt;id&gt;/image"</pre>
+
+    <h3>Reading and writing to a different file</h3>
+<pre>codemancer -i input_file -o output_file -p "extract inlined types into interfaces in a separate file"</pre>
+
+    <h3>Writing from prompt to file</h3>
+<pre>codemancer -o output_file -p "I need an AppleScript to wipe Safari history on restart"</pre>
+
+    <h3>Simple prompting</h3>
+<pre>codemancer -p "what's a bulletproof regex for validating emails"</pre>
+
+    <h3>Customizing model and temperature</h3>
+<pre>codemancer -i input_file -m gpt-3.5-turbo -t 0.5 -p "change all variable names to obscure animals"</pre>
+  </section>
+
+  <section>
+    <h2>Limitations</h2>
+    <ul>
+      <li>If multiple code blocks come back in a completion, Codemancer prompts for confirmation on each and only writes the accepted one. With verbosity 0 it auto-confirms the first block.</li>
+      <li>File content + prompt are limited to 8K tokens for GPT-4. Big or dense files will return a 400 error.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>License</h2>
+    <p>GPL License — this code was largely written by AI with some human guidance.</p>
+  </section>
+
+  <div class="links">
+    <a href="https://github.com/0xmmo/codemancer" target="_blank" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+    <a href="https://www.npmjs.com/package/codemancer" target="_blank" aria-label="npm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 18 7"><path d="M0 0h18v6H9v1H5V6H0V0zm1 5h2V2h1v3h1V1H1v4zm5-4v5h2V5h2V1H6zm2 1h1v2H8V2zm3-1v4h2V2h1v3h1V2h1v3h1V1h-6z"/></svg></a>
+  </div>
+
+  <footer>
+    <div>Codemancer · GPL · 2023</div>
+    <div>Built by <a href="https://mmoustafa.com">Mohamed Moustafa</a> · part of <a href="https://mmoustafa.com#projects">mmoustafa.com/projects</a></div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('button.copy').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy || '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = btn.textContent;
+          btn.textContent = 'copied';
+          btn.classList.add('ok');
+          setTimeout(() => { btn.textContent = original; btn.classList.remove('ok'); }, 1400);
+        } catch (e) {}
+      });
+    });
+  </script>
+</body>
 </html>
